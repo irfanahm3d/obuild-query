@@ -19,14 +19,18 @@ import click
     required=True,
     help="Bounding box coordinates in the form: south west north east",
 )
-def main(file_path, bbox):
+@click.option(
+    "--chunk-size",
+    type=int,
+    default=100000,
+    help="The size to chunk the dataset. Adjust this size based on your memory constraints",
+)
+def main(file_path, bbox, chunk_size):
     # Unpack the bounding box coordinates
     south, west, north, east = bbox
 
     # Create a bounding box geometry
     bbox_geometry = box(west, south, east, north)
-    # Define chunk size
-    chunk_size = 100000  # Adjust this size based on your memory constraints
 
     # Initialize an empty list to store filtered chunks
     filtered_chunks = []
