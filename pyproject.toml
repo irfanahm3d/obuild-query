@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "obuild-query"
+version = "0.1.0"
+description = ""
+authors = ["Irfan <irfanahm3d@gmail.com>"]
+readme = "README.md"
+packages = [{include = "obuild_query"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pandas = "^2.2.2"
+geopandas = "^0.14.4"
+
+[tool.poetry.scripts]
+obuild = "obuild_query:main"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.4.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
