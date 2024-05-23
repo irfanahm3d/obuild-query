@@ -25,7 +25,13 @@ import click
     default=100000,
     help="The size to chunk the dataset. Adjust this size based on your memory constraints",
 )
-def main(file_path, bbox, chunk_size):
+@click.option(
+    "--confidence",
+    type=float,
+    default=0.95,
+    help="Confidence score of the buildings",
+)
+def main(file_path, bbox, chunk_size, confidence):
     # Unpack the bounding box coordinates
     south, west, north, east = bbox
 
@@ -48,7 +54,11 @@ def main(file_path, bbox, chunk_size):
             unit="chunk",
             desc="Processing chunks",
             unit_scale=True,
+            dynamic_ncols=True,
         ):
+            # Filter rows based on confidence score
+            chunk = chunk[chunk["confidence"] > confidence]
+
             # Convert the chunk to a GeoDataFrame and define the geometry column
             gdf_chunk = gpd.GeoDataFrame(
                 chunk, geometry=gpd.points_from_xy(chunk.longitude, chunk.latitude)
@@ -66,4 +76,6 @@ def main(file_path, bbox, chunk_size):
     # Count the number of buildings
     building_count = len(filtered_buildings)
 
-    print(f"Number of buildings in bounding box: {building_count}")
+    print(
+        f"Number of buildings in bounding box (with confidence score {confidence}): {building_count}"
+    )
